@@ -31,18 +31,15 @@ const App = () => {
     const handleKeyPressStart = (event) => {
         if (event.keyCode === 13) {
             // setStartCoords(searchQuery(startQuery))
-            console.log(searchStartQuery(startQuery))
-            console.log(`Start Coords: ${startCoords}`)
+            searchStartQuery(startQuery)
         }
     }
 
     const handleKeyPressEnd = (event) => {
         if (event.keyCode === 13) {
-            setEndCoords(searchEndQuery(endQuery))
-            console.log(`Start Coords: ${endCoords}`)
+            searchEndQuery(endQuery)
         }
     }
-
 
     return (
         <>

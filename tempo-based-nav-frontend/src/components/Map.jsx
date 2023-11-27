@@ -1,5 +1,8 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { MapContainer, TileLayer, useMap, Marker} from 'react-leaflet'
+import RoutingControl from './RoutingControl'
+import Routing from './RoutingControl'
+
 import axios from 'axios'
 
 const ChangeMapView = ({ coords }) => {
@@ -64,7 +67,7 @@ const Map = ({ startCoords, endCoords }) => {
                     style={{ height: "100vh", width: "100%", zIndex: -1 }}
                     center={position}
                     zoom="13"
-                    scrollWheelZoom={false}
+                    scrollWheelZoom={true}
                 >
                     <TileLayer
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -73,6 +76,8 @@ const Map = ({ startCoords, endCoords }) => {
                     <ChangeMapView coords={position} />
                     {startCoords && (<Marker position={startCoords}></Marker>)}
                     {endCoords && (<Marker position={endCoords}></Marker>)}
+                    {/* <RoutingControl startCoords={startCoords} endCoords={endCoords}/> */}
+                    <Routing startCoords={startCoords} endCoords={endCoords}></Routing>
                 </MapContainer>
             )}
         </>
