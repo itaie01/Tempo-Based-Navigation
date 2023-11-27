@@ -1,6 +1,9 @@
 import Map from './components/Map'
 import SearchBar from './components/SearchBar'
-import { useState } from 'react'
+import SpotifyLogin from './components/SpotifyLogin'
+import { useEffect, useState } from 'react'
+import { getTokenFromUrl } from './services/spotifyAuthorization'
+import SpotifyWebApi from 'spotify-web-api-js';
 
 import getLocationData from './services/nominatim'
 
@@ -9,6 +12,8 @@ const App = () => {
     const [endQuery, setEndQuery] = useState('')
     const [startCoords, setStartCoords] = useState(null)
     const [endCoords, setEndCoords] = useState(null)
+    const [spotifyToken, setSpotifyToken] = useState("")
+    const SPOTIFY = new SpotifyWebApi()
 
     const searchStartQuery = query => {
         getLocationData(query)
@@ -30,7 +35,6 @@ const App = () => {
     
     const handleKeyPressStart = (event) => {
         if (event.keyCode === 13) {
-            // setStartCoords(searchQuery(startQuery))
             searchStartQuery(startQuery)
         }
     }
@@ -41,11 +45,25 @@ const App = () => {
         }
     }
 
+    useEffect(() => {
+        const urlParams = getTokenFromUrl()
+        window.location.hash = ""
+        const _spotifyToken = urlParams.access_token
+        console.log(`Spotify Token: ${_spotifyToken}`)
+
+        if (_spotifyToken) {
+            setSpotifyToken(_spotifyToken)
+            SPOTIFY.setAccessToken(_spotifyToken)
+            SPOTIFY.getMe().then(user => console.log(user))
+        }
+    }, [SPOTIFY])
+
     return (
         <>
             <SearchBar label={'Start Location'} searchQuery={startQuery} handleQueryChange={handleQueryChangeStart} handleKeyPress={handleKeyPressStart}/>
             <SearchBar label={'End Location'} searchQuery={endQuery} handleQueryChange={handleQueryChangeEnd} handleKeyPress={handleKeyPressEnd}/>
             <Map startCoords={startCoords} endCoords={endCoords} />
+            <SpotifyLogin />
         </>
     )
 }
