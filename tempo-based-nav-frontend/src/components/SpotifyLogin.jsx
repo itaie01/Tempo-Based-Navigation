@@ -1,19 +1,11 @@
-import { useState } from "react";
-import { requestAuthorization } from "../services/spotifyAuthorization";
+import { useState, useEffect } from "react";
+import { requestAuthorization, generateRandomString } from "../services/spotifyAuthorization";
 
 const SpotifyLogin = () => {
-    const [clientId, setClientId] = useState('')
-    const [clientSecret, setClientSecret] = useState('')
-
+    const [clientId, setClientId] = useState(localStorage.getItem('client_id'))
 
     const handleClientIdChange = (event) => {
         setClientId(event.target.value)
-        console.log(event.target.value)
-    }
-
-    const handleClientSecretChange = (event) => {
-        setClientSecret(event.target.value)
-        console.log(event.target.value)
     }
 
     return (
@@ -23,11 +15,7 @@ const SpotifyLogin = () => {
                 <input type="text" placeholder="" value={clientId} onChange={handleClientIdChange} />
             </div>
             <div>
-                <label htmlFor="clientSecret">Client Secret</label>
-                <input type="text" id="clientSecret" value={clientSecret} onChange={handleClientSecretChange} />
-            </div>
-            <div>
-                <a href={requestAuthorization(clientId, clientSecret)}>Request Authorization</a>
+                <a href={requestAuthorization(clientId)}>Request Authorization</a>
             </div>
         </>
     )
